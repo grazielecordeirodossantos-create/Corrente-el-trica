@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Corrente elétrica</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f6f7fb; padding:20px; }
+    .header { display:flex; align-items:center; gap:15px; margin-bottom:20px; }
+    .header img { height:50px; }
+    .header h1 { margin:0; font-size:22px; }
+
+    .progress-box { background:#fff; padding:12px; border-radius:10px; margin-bottom:25px; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+    .progress-bar { height:10px; background:#e0e0e0; border-radius:10px; overflow:hidden; margin-top:8px; }
+    .progress-fill { height:100%; width:0%; background:#6c5ce7; transition:0.3s; }
+
+    .questao { background:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+    .topo-questao { display:flex; justify-content:space-between; align-items:center; }
+    .numero { font-weight:bold; }
+
+    .dificuldade { padding:4px 10px; border-radius:20px; font-size:12px; font-weight:bold; color:#fff; }
+    .facil { background:#2ecc71; }
+    .medio { background:#f39c12; }
+    .dificil { background:#e74c3c; }
+
+    .fonte { font-size:12px; color:#555; margin:6px 0 12px 0; }
+
+    .alternativas label { display:block; background:#f1f3f8; padding:10px; border-radius:8px; margin-bottom:8px; cursor:pointer; transition: background-color 0.3s ease;}
+    .alternativas label:hover { background-color: #dfe6e9; }
+
+    .acoes { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .acoes button, .acoes select { padding:6px 10px; border:none; border-radius:6px; font-size:12px; cursor:pointer; }
+    .acerto { background:#55efc4; }
+    .erro { background:#ff7675; color:#fff; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  
+  <button onclick="window.location.href='https://sites.google.com/view/listasdequestes/listas-de-f%C3%ADsica';" 
+          style="margin-bottom: 20px; padding: 8px 16px; font-size: 14px; cursor: pointer;">Voltar</button>
+
+<button id="btn-todas-questoes" 
+        style="background:#6c5ce7; color:#fff; border:none; padding:8px 16px; font-size:14px; cursor:pointer; margin-bottom:20px; margin-left:10px;">
+  Ver todas as questões
+</button>
+
+<div id="lista-questoes" style="display:none; margin-bottom:20px;">
+  <!-- Números das questões aparecerão aqui -->
+</div>
+
+  <div class="header">
+    <img src=https://res.cloudinary.com/demx2vuon/image/upload/v1767187421/Logomarca_zev7vf.png alt="GB Cursos" />
+    <h1>Lista 01 – Introdução à Eletrodinâmica: Corrente Elétrica</h1>
+  </div>
+
+  <div class="progress-box">
+    <strong>Progresso:</strong> <span id="contador">0</span>/30 concluídas
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  </div>
+  
+  <!-- Modal de finalização -->
+<div id="modal-final" style="
+  display: none; position: fixed; top:0; left:0; width: 100%; height: 100%; 
+  background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 9999;
+">
+  <div style="
+    background:#fff; padding: 25px 30px; border-radius: 12px; max-width: 400px; width: 90%;
+    text-align: center; box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  ">
+    <h2>Parabéns! Você concluiu a lista.</h2>
+    <p id="resultado-dificuldades" style="font-size: 16px; margin: 20px 0;"></p>
+    <button onclick="fecharModal()" style="
+      background:#6c5ce7; color:#fff; border:none; padding: 10px 20px; font-size: 14px;
+      cursor: pointer; border-radius: 6px;"
+    >Fechar</button>
+  </div>
+</div>
+
+
+ <!-- QUESTÃO 01 -->
+<div class="questao" data-id="1" id="questao-1">
+  <div class="topo-questao">
+    <div class="numero">Questão 01</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">UNIEVA 2015</div>
+  <p>
+    O efeito Joule está presente diariamente na vida moderna.
+    <br><br>
+    Um exemplo da aplicabilidade do efeito Joule está no
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q1" value="A">A) cartão magnético.</label>
+    <label><input type="radio" name="q1" value="B">B) aquecedor elétrico.</label>
+    <label><input type="radio" name="q1" value="C">C) microfone elétrico.</label>
+    <label><input type="radio" name="q1" value="D">D) elevador hidráulico.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(1)">Concluí</button>
+    <button onclick="proximaQuestao(1)">Próxima questão</button>
+    <button onclick="questaoAnterior(1)">Questão anterior</button>
+    <button onclick="refazerQuestao(1)">Refazer</button>
+  </div>
+</div>
+
+
+ <!-- QUESTÃO 02 -->
+<div class="questao" data-id="2" id="questao-2" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 02</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">UNIEVA 2017</div>
+  <p>
+    É dito que não devemos encostar em fios desencapados, 
+    devido ao perigo de sofrermos descargas elétricas. Por outro 
+    lado, os pássaros pousam em fios de alta tensão e depois 
+    saem voando.
+  </p>
+  <p>
+    Os pássaros estão livres do choque porque
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q2" value="A">A) possuem uma substância isolante nos dedos dos pés.</label>
+    <label><input type="radio" name="q2" value="B">B) estão sempre com as plumas completamente secas.</label>
+    <label><input type="radio" name="q2" value="C">C) tocam apenas um fio com os dois pés próximos.</label>
+    <label><input type="radio" name="q2" value="D">D) contêm nos seus ossos uma substância isolante.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(2)">Concluí</button>
+    <button onclick="proximaQuestao(2)">Próxima questão</button>
+    <button onclick="questaoAnterior(2)">Questão anterior</button>
+    <button onclick="refazerQuestao(2)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 03 -->
+<div class="questao" data-id="3" id="questao-3" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 03</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">FIMCA</div>
+  <p>
+    “A corrente elétrica é o fluxo ordenado de cargas elétricas,
+    que se movem de forma orientada em um condutor elétrico
+    sólido ou em soluções iônicas.”
+  </p>
+  <p>
+    “Esse fenômeno ocorre devido ao encontro dos elétrons da
+    corrente elétrica com as partículas do condutor. Os elétrons
+    sofrem colisões com átomos do condutor; parte da energia
+    cinética (energia de movimento) do elétron é transferida
+    para o átomo aumentando seu estado de agitação,
+    consequentemente a sua temperatura.”
+  </p>
+  <p>
+    Considerando os trechos anteriores podemos afirmar que a
+    transformação de energia elétrica em energia cinética é
+    conhecido por:
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q3" value="A">A) Lei de Ohm.</label>
+    <label><input type="radio" name="q3" value="B">B) Efeito Joule.</label>
+    <label><input type="radio" name="q3" value="C">C) Lei de Faraday.</label>
+    <label><input type="radio" name="q3" value="D">D) Lei de Coulomb.</label>
+    <label><input type="radio" name="q3" value="E">E) Blindagem eletrostática.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(3)">Concluí</button>
+    <button onclick="proximaQuestao(3)">Próxima questão</button>
+    <button onclick="questaoAnterior(3)">Questão anterior</button>
+    <button onclick="refazerQuestao(3)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 04 -->
+<div class="questao" data-id="4" id="questao-4" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 04</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Ifmg</div>
+  <p>
+    O meio que conduz melhor a eletricidade é a(o)
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q4" value="A">A) ar, devido à facilidade de propagar o relâmpago.</label>
+    <label><input type="radio" name="q4" value="B">B) metal, porque possui maior número de cargas livres.</label>
+    <label><input type="radio" name="q4" value="C">C) plástico, pois deriva-se do petróleo, grande fonte de energia.</label>
+    <label><input type="radio" name="q4" value="D">D) madeira, uma vez que as árvores atraem raios em dias de tempestade.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(4)">Concluí</button>
+    <button onclick="proximaQuestao(4)">Próxima questão</button>
+    <button onclick="questaoAnterior(4)">Questão anterior</button>
+    <button onclick="refazerQuestao(4)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 05 -->
+<div class="questao" data-id="5" id="questao-5" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 05</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Utfpr</div>
+  <p>
+    Assinale a alternativa correta.<br>
+    A grandeza intensidade de corrente elétrica tem como unidade de medida ampère e essa unidade é definida pela razão (divisão) entre duas outras unidades, que são, respectivamente,
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q5" value="A">A) coulomb e segundo.</label>
+    <label><input type="radio" name="q5" value="B">B) volt e segundo.</label>
+    <label><input type="radio" name="q5" value="C">C) coulomb e volt.</label>
+    <label><input type="radio" name="q5" value="D">D) joule e volt.</label>
+    <label><input type="radio" name="q5" value="E">E) volt e ohm.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(5)">Concluí</button>
+    <button onclick="proximaQuestao(5)">Próxima questão</button>
+    <button onclick="questaoAnterior(5)">Questão anterior</button>
+    <button onclick="refazerQuestao(5)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 06 -->
+<div class="questao" data-id="6" id="questao-6" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 06</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Upe</div>
+  <p>
+    Uma corrente de 0,3 A que atravessa o peito pode produzir fibrilação (contrações excessivamente rápidas das fibrilas musculares) no coração de um ser humano, perturbando o ritmo dos batimentos cardíacos com efeitos possivelmente fatais. Considerando que a corrente dure 2,0 min, o número de elétrons que atravessam o peito do ser humano vale:<br>
+    Dado: carga do elétron = 1,6 x10<sup>-19</sup> C.
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q6" value="A">A) 5,35 · 10²</label>
+    <label><input type="radio" name="q6" value="B">B) 1,62 · 10<sup>-19</sup></label>
+    <label><input type="radio" name="q6" value="C">C) 4,12 · 10¹⁸</label>
+    <label><input type="radio" name="q6" value="D">D) 2,45 · 10¹⁸</label>
+    <label><input type="radio" name="q6" value="E">E) 2,25 · 10²⁰</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(6)">Concluí</button>
+    <button onclick="proximaQuestao(6)">Próxima questão</button>
+    <button onclick="questaoAnterior(6)">Questão anterior</button>
+    <button onclick="refazerQuestao(6)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 07 -->
+<div class="questao" data-id="7" id="questao-7" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 07</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Uerj</div>
+  <p>
+    Pela seção de um condutor metálico submetido a uma tensão elétrica, atravessam 4,0 x 10<sup>18</sup> elétrons em 20 segundos.<br>
+    A intensidade média da corrente elétrica, em ampere, que se estabelece no condutor corresponde a:<br>
+    Dado: carga elementar = 1,6 x 10<sup>-19</sup> C.
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q7" value="A">A) 1,0 x 10<sup>-2</sup></label>
+    <label><input type="radio" name="q7" value="B">B) 3,2 x 10<sup>-2</sup></label>
+    <label><input type="radio" name="q7" value="C">C) 2,4 x 10<sup>-3</sup></label>
+    <label><input type="radio" name="q7" value="D">D) 4,1 x 10<sup>-3</sup></label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(7)">Concluí</button>
+    <button onclick="proximaQuestao(7)">Próxima questão</button>
+    <button onclick="questaoAnterior(7)">Questão anterior</button>
+    <button onclick="refazerQuestao(7)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 08 -->
+<div class="questao" data-id="8" id="questao-8" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 08</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Ufop</div>
+  <p>
+    Em uma tarde de tempestade, numa região desprovida de para-raios, a antena de uma casa recebe uma carga que faz fluir uma corrente de 1,2 x 10<sup>4</sup> A, em um intervalo de tempo de 25 x 10<sup>-6</sup> s. Qual a carga total transferida para a antena?
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q8" value="A">A) 0,15 C</label>
+    <label><input type="radio" name="q8" value="B">B) 0,2 C</label>
+    <label><input type="radio" name="q8" value="C">C) 0,48 C</label>
+    <label><input type="radio" name="q8" value="D">D) 0,3 C</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(8)">Concluí</button>
+    <button onclick="proximaQuestao(8)">Próxima questão</button>
+    <button onclick="questaoAnterior(8)">Questão anterior</button>
+    <button onclick="refazerQuestao(8)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 09 -->
+<div class="questao" data-id="9" id="questao-9" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 09</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Unicamp</div>
+  <p>
+    O carro elétrico é uma alternativa aos veículos com motor a combustão interna. Qual é a autonomia de um carro elétrico que se desloca a 60 km/h, se a corrente elétrica empregada nesta velocidade é igual a 50 A e a carga máxima armazenada em suas baterias é q = 75 Ah?
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q9" value="A">A) 40,0 km.</label>
+    <label><input type="radio" name="q9" value="B">B) 62,5 km.</label>
+    <label><input type="radio" name="q9" value="C">C) 90,0 km.</label>
+    <label><input type="radio" name="q9" value="D">D) 160,0 km.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(9)">Concluí</button>
+    <button onclick="proximaQuestao(9)">Próxima questão</button>
+    <button onclick="questaoAnterior(9)">Questão anterior</button>
+    <button onclick="refazerQuestao(9)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 10 -->
+<div class="questao" data-id="10" id="questao-10" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 10</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">ENEM PPL 2018</div>
+  <p>
+    Com o avanço das multifunções dos dispositivos eletrônicos portáteis, como os smartphones, o gerenciamento da
+    duração da bateria desses equipamentos torna-se cada vez mais crítico. O manual de um telefone celular diz que a
+    quantidade de carga fornecida pela sua bateria é de 1.500 mAh.<br><br>
+    A quantidade de carga fornecida por essa bateria, em coulomb, é de:
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q10" value="A">A) 90.</label>
+    <label><input type="radio" name="q10" value="B">B) 1500.</label>
+    <label><input type="radio" name="q10" value="C">C) 5400.</label>
+    <label><input type="radio" name="q10" value="D">D) 90 000.</label>
+    <label><input type="radio" name="q10" value="E">E) 5 400 000.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(10)">Concluí</button>
+    <button onclick="proximaQuestao(10)">Próxima questão</button>
+    <button onclick="questaoAnterior(10)">Questão anterior</button>
+    <button onclick="refazerQuestao(10)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 11 -->
+<div class="questao" data-id="11" id="questao-11" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 11</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">EFOMM 2021</div>
+  <p>
+    Quando pousam em um fio de alta tensão, os pássaros não morrem porque
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q11" value="A">A) instintivamente só pousam em fios onde não há corrente.</label>
+    <label><input type="radio" name="q11" value="B">B) suportam altas diferenças de potencial sem sofrer qualquer dano.</label>
+    <label><input type="radio" name="q11" value="C">C) só pousam agrupados, induzindo que a corrente seja dividida por todos eles.</label>
+    <label><input type="radio" name="q11" value="D">D) ao pousarem com as patas num mesmo fio, a corrente não flui pelo seu corpo.</label>
+    <label><input type="radio" name="q11" value="E">E) pousam no fio somente em dias ensolarados.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(11)">Concluí</button>
+    <button onclick="proximaQuestao(11)">Próxima questão</button>
+    <button onclick="questaoAnterior(11)">Questão anterior</button>
+    <button onclick="refazerQuestao(11)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 12 -->
+<div class="questao" data-id="12" id="questao-12" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 12</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">IFSUDESTE MINAS 2020</div>
+  <p>
+    Francisco, querendo saber o tempo de carga de um aparelho
+    celular cuja capacidade de carga elétrica indicada na bateria
+    era de 3400 mAh (miliampères-hora), ao olhar a indicação
+    de seu carregador de celular, ele observa que o mesmo
+    indica uma corrente elétrica de 2,0 A (ampères).<br><br>
+    A partir desses dados e supondo que não existam perdas de
+    energia durante o carregamento do aparelho e que o mesmo
+    encontra-se totalmente descarregado, qual é o tempo
+    estimado para carregar o aparelho completamente?
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q12" value="A">A) 1 hora e 11 minutos</label>
+    <label><input type="radio" name="q12" value="B">B) 1 hora e 20 minutos</label>
+    <label><input type="radio" name="q12" value="C">C) 1 hora e 35 minutos</label>
+    <label><input type="radio" name="q12" value="D">D) 1 hora e 42 minutos</label>
+    <label><input type="radio" name="q12" value="E">E) 2 horas e 10 minutos</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(12)">Concluí</button>
+    <button onclick="proximaQuestao(12)">Próxima questão</button>
+    <button onclick="questaoAnterior(12)">Questão anterior</button>
+    <button onclick="refazerQuestao(12)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 13 -->
+<div class="questao" data-id="13" id="questao-13" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 13</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">UFT</div>
+  <p>
+    Durante uma tempestade, as descargas elétricas (raios)
+    podem atingir e matar animais e pessoas. Para diminuir os
+    riscos, em dias chuvosos é aconselhado ficar em campo
+    aberto ao invés de se abrigar debaixo de uma árvore, por
+    exemplo. Porém, esta orientação não evita as consequências
+    provocadas pelos raios, pois uma pessoa pode ser atingida
+    por meio da “corrente de terra”, que é a corrente produzida
+    na terra devido a uma descarga elétrica próximo de onde ela
+    encontra-se. Essa corrente elétrica percorre o corpo da
+    pessoa provocando parada cardíaca, paralisando músculos
+    da respiração e causando queimaduras internas.<br><br>
+    Para impedir as consequências da “corrente de terra”, a
+    pessoa deve permanecer com:
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q13" value="A">A) Os pés no chão e afastados.</label>
+    <label><input type="radio" name="q13" value="B">B) Os pés e as mãos no chão.</label>
+    <label><input type="radio" name="q13" value="C">C) As mãos no chão e afastadas.</label>
+    <label><input type="radio" name="q13" value="D">D) Um pé no chão.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(13)">Concluí</button>
+    <button onclick="proximaQuestao(13)">Próxima questão</button>
+    <button onclick="questaoAnterior(13)">Questão anterior</button>
+    <button onclick="refazerQuestao(13)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 14 -->
+<div class="questao" data-id="14" id="questao-14" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 14</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Uece</div>
+  <p>
+    Uma corrente elétrica percorre um chuveiro elétrico construído com um resistor ôhmico. A corrente elétrica pode ser medida em unidades de
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q14" value="A">A) ampères/segundo.</label>
+    <label><input type="radio" name="q14" value="B">B) volts/segundo.</label>
+    <label><input type="radio" name="q14" value="C">C) coulombs/segundo.</label>
+    <label><input type="radio" name="q14" value="D">D) ohms/segundo.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(14)">Concluí</button>
+    <button onclick="proximaQuestao(14)">Próxima questão</button>
+    <button onclick="questaoAnterior(14)">Questão anterior</button>
+    <button onclick="refazerQuestao(14)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 15 -->
+<div class="questao" data-id="15" id="questao-15" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 15</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Efomm</div>
+  <p>
+    Por uma seção transversal de um fio cilíndrico de cobre passam, a cada hora, 9,00 x 10<sup>22</sup> elétrons. O valor aproximado da corrente elétrica média no fio, em amperes, é<br>
+    Dado: carga elementar e = 1,60 x 10<sup>–19</sup> C.
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q15" value="A">A) 14,4</label>
+    <label><input type="radio" name="q15" value="B">B) 12,0</label>
+    <label><input type="radio" name="q15" value="C">C) 9,00</label>
+    <label><input type="radio" name="q15" value="D">D) 4,00</label>
+    <label><input type="radio" name="q15" value="E">E) 1,20</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(15)">Concluí</button>
+    <button onclick="proximaQuestao(15)">Próxima questão</button>
+    <button onclick="questaoAnterior(15)">Questão anterior</button>
+    <button onclick="refazerQuestao(15)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 16 -->
+<div class="questao" data-id="16" id="questao-16" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 16</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Unicamp</div>
+  <p>
+   Atualmente há um número cada vez maior de equipamentos elétricos portáteis e isto tem levado a grandes esforços no desenvolvimento de baterias com maior capacidade de carga, menor volume, menor peso, maior quantidade de ciclos e menor tempo de recarga, entre outras qualidades.
+Outro exemplo de desenvolvimento, com vistas a recargas rápidas, é o protótipo de uma bateria de íon-lítio, com estrutura tridimensional. Considere que uma bateria, inicialmente descarregada, é carregada com uma corrente média im = 3,2 A até atingir sua carga máxima de Q = 0,8 Ah. O tempo gasto para carregar a bateria é de
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q16" value="A">A) 240 minutos.</label>
+    <label><input type="radio" name="q16" value="B">B) 90 minutos.</label>
+    <label><input type="radio" name="q16" value="C">C) 15 minutos.</label>
+    <label><input type="radio" name="q16" value="D">D) 4 minutos.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(16)">Concluí</button>
+    <button onclick="proximaQuestao(16)">Próxima questão</button>
+    <button onclick="questaoAnterior(16)">Questão anterior</button>
+    <button onclick="refazerQuestao(16)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 17 -->
+<div class="questao" data-id="17" id="questao-17" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 17</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Unigranrio</div>
+  <p>
+   Dependendo da intensidade da corrente elétrica que atravesse o corpo humano, é possível sentir vários efeitos, como dores, contrações musculares, parada respiratória, entre outros, que podem ser fatais. Suponha que uma corrente de 0,1 A atravesse o corpo de uma pessoa durante 2,0 minutos. Qual o número de elétrons que atravessa esse corpo, sabendo que o valor da carga elementar do elétron é 1,6 · 10–19 C.
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q17" value="A">A) 1,2 · 10<sup>18</sup></label>
+    <label><input type="radio" name="q17" value="B">B) 1,9 · 10<sup>20</sup></label>
+    <label><input type="radio" name="q17" value="C">C) 7,5 · 10<sup>19</sup></label>
+    <label><input type="radio" name="q17" value="D">D) 3,7 · 10<sup>19</sup></label>
+    <label><input type="radio" name="q17" value="E">E) 3,2 · 10<sup>19</sup></label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(17)">Concluí</button>
+    <button onclick="proximaQuestao(17)">Próxima questão</button>
+    <button onclick="questaoAnterior(17)">Questão anterior</button>
+    <button onclick="refazerQuestao(17)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 18 -->
+<div class="questao" data-id="18" id="questao-18" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 18</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Uece</div>
+  <p>
+     Considere um resistor ligado a uma bateria e dissipando calor por efeito Joule. Pelo resistor, são medidos 3 µC/s de carga elétrica. Assim, a corrente elétrica pelo resistor é
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q18" value="A">A) 3.10<sup>6</sup> A.</label>
+    <label><input type="radio" name="q18" value="B">B) 3.10<sup>-6</sup> µA.</label>
+    <label><input type="radio" name="q18" value="C">C) 3.10<sup>6</sup> µA.</label>
+    <label><input type="radio" name="q18" value="D">D) 3.10<sup>-6</sup> A.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(18)">Concluí</button>
+    <button onclick="proximaQuestao(18)">Próxima questão</button>
+    <button onclick="questaoAnterior(18)">Questão anterior</button>
+    <button onclick="refazerQuestao(18)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 19 -->
+<div class="questao" data-id="19" id="questao-19" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 19</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Esc. Naval</div>
+  <p>
+    A maior parte da luz emitida por descargas atmosféricas é devido ao encontro de cargas negativas descendentes com cargas positivas ascendentes (raio de retorno). Supondo que, durante um raio desse tipo, uma corrente eletrônica constante de 30 kA transfere da nuvem para a terra uma carga negativa total de 15 C, a duração desse raio, em milissegundos, será
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q19" value="A">A) 3,0</label>
+    <label><input type="radio" name="q19" value="B">B) 2,0</label>
+    <label><input type="radio" name="q19" value="C">C) 1,5</label>
+    <label><input type="radio" name="q19" value="D">D) 1,0</label>
+    <label><input type="radio" name="q19" value="E">E) 0,5</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(19)">Concluí</button>
+    <button onclick="proximaQuestao(19)">Próxima questão</button>
+    <button onclick="questaoAnterior(19)">Questão anterior</button>
+    <button onclick="refazerQuestao(19)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 20 -->
+<div class="questao" data-id="20" id="questao-20" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 20</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Ifsp</div>
+  <p>
+     Dois dos principais efeitos causados pela passagem de uma corrente elétrica são:
+I. Efeito térmico ou Joule – uma corrente elétrica, pela sua passagem, provoca uma variação de temperatura num condutor.
+II. Efeito magnético – toda corrente elétrica cria ao seu redor um campo magnético no espaço em torno de si. Isto pode ser verificado experimentalmente aproximando-se uma bússola de um condutor sendo percorrido por corrente elétrica: a agulha sobre deflexão.
+Considerando um condutor metálico percorrido por uma corrente de intensidade de 1 A, assinale a alternativa correta.
+
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q20" value="A">a) A corrente de intensidade de 1 A corresponde a 2 Coulomb (C) por segundo.</label>
+    <label><input type="radio" name="q20" value="B">b) Em 12 s, a quantidade de carga que atravessará uma região do condutor será de 10 C.</label>
+    <label><input type="radio" name="q20" value="C">c) Esta corrente elétrica corresponde a um fluxo de 6,25 x 10<sup>18</sup> elétrons por segundo, considerando a carga elementar igual a 1,6 x 10–19 C.</label>
+    <label><input type="radio" name="q20" value="D">d) A velocidade média dos elétrons que constituem a corrente é igual à velocidade da luz no vácuo.</label>
+    <label><input type="radio" name="q20" value="E">e) O sentido convencional da corrente é igual ao movimento dos elétrons livres dentro do condutor.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(20)">Concluí</button>
+    <button onclick="proximaQuestao(20)">Próxima questão</button>
+    <button onclick="questaoAnterior(20)">Questão anterior</button>
+    <button onclick="refazerQuestao(20)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 21 -->
+<div class="questao" data-id="21" id="questao-21" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 21</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Fuvest</div>
+  <p>
+    Medidas elétricas indicam que a superfície terrestre tem carga elétrica total negativa de, aproximadamente, 600.000 coulombs. Em tempestades, raios de cargas positivas, embora raros, podem atingir a superfície terrestre. A corrente elétrica desses raios pode atingir valores de até 300.000 A. Que fração da carga elétrica total da Terra poderia ser compensada por um raio de 300.000 A e com duração de 0,5 s?
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q21" value="A">A) 1/2</label>
+    <label><input type="radio" name="q21" value="B">B) 1/3</label>
+    <label><input type="radio" name="q21" value="C">C) 1/4</label>
+    <label><input type="radio" name="q21" value="D">D) 1/10</label>
+    <label><input type="radio" name="q21" value="E">E) 1/20</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(21)">Concluí</button>
+    <button onclick="proximaQuestao(21)">Próxima questão</button>
+    <button onclick="questaoAnterior(21)">Questão anterior</button>
+    <button onclick="refazerQuestao(21)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 22 -->
+<div class="questao" data-id="22" id="questao-22" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 22</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">UNIFOR 2025</div>
+  <p>
+   Os veículos elétricos apresentam-se como uma grande
+alternativa à plataforma dos combustíveis fósseis. Um fato
+interessante sobre os carros elétricos é o mecanismo de
+controle da intensidade e frequência da corrente elétrica.
+Determinada montadora desenvolveu um carro elétrico cujo
+banco de baterias é capaz de armazenar 10800 Ah de carga.
+A montadora de veículos declara que este modelo possui
+uma autonomia de 240 km.</p>
+
+<p>Supondo que, em uma viagem, o carro tenha se deslocado
+com velocidade média de 20 m/s e percorrido a distância
+equivalente a sua autonomia, qual foi aproximadamente a
+corrente elétrica média que passou pelo sistema geral deste
+veículo?</p>
+
+
+  <div class="alternativas">
+    <label><input type="radio" name="q22" value="A">A) 0,9 A</label>
+    <label><input type="radio" name="q22" value="B">B) 3273 A</label>
+    <label><input type="radio" name="q22" value="C">C) 900 A</label>
+    <label><input type="radio" name="q22" value="D">D) 90 A</label>
+    <label><input type="radio" name="q22" value="E">E) 33 A</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(22)">Concluí</button>
+    <button onclick="proximaQuestao(22)">Próxima questão</button>
+    <button onclick="questaoAnterior(22)">Questão anterior</button>
+    <button onclick="refazerQuestao(22)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 23 -->
+<div class="questao" data-id="23" id="questao-23" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 23</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">FATEC 2022</div>
+  <p>
+    Com o intuito de diminuir significativamente a geração de resíduos, têm-se estimulado a redução de consumo, a reciclagem e o reuso de dispositivos eletrônicos. Atualmente,
+    um dos grandes vilões do meio ambiente é o descarte de baterias.<br><br>
+    Apesar da criação das baterias recarregáveis, o problema ainda persiste. Esse é um dos motivos pelo qual a produção em larga escala de carros elétricos tem sofrido resistência.
+    Devido a essa necessidade de diminuição de resíduos, as indústrias têm investido no sentido de ampliar a durabilidade e a capacidade de operação dessas baterias. Uma das grandezas físicas utilizada para aferir a capacidade dessas baterias tem como unidade de medida “A·h”.<br><br>
+    É correto afirmar que essa unidade de medida se refere à grandeza física
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q23" value="A">A) carga elétrica.</label>
+    <label><input type="radio" name="q23" value="B">B) corrente elétrica.</label>
+    <label><input type="radio" name="q23" value="C">C) potencial elétrico.</label>
+    <label><input type="radio" name="q23" value="D">D) resistência elétrica.</label>
+    <label><input type="radio" name="q23" value="E">E) capacitância elétrica.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(23)">Concluí</button>
+    <button onclick="proximaQuestao(23)">Próxima questão</button>
+    <button onclick="questaoAnterior(23)">Questão anterior</button>
+    <button onclick="refazerQuestao(23)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 24 -->
+<div class="questao" data-id="24" id="questao-24" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 24</div>
+    <div class="dificuldade dificil">difícil</div>
+  </div>
+  <div class="fonte">Ifmg</div>
+  <p>
+    As afirmativas a seguir referem-se às precauções que um técnico eletricista deve tomar com relação à segurança no seu trabalho.<br>
+    Assinale (V) para as afirmativas verdadeiras ou (F), para as falsas.<br>
+    (__) O risco de choque elétrico ocorre quando se toca em dois ou mais fios ao mesmo tempo.<br>
+    (__) O eletricista deve usar luvas de borracha adequadas e evitar curtos-circuitos entre dois ou mais fios, quando trabalhar com a rede elétrica energizada.<br>
+    (__) O uso de botas de borracha impede a ocorrência de choques elétricos.<br><br>
+    A sequência correta encontrada é
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q24" value="A">A) V - V - F.</label>
+    <label><input type="radio" name="q24" value="B">B) V - F - F.</label>
+    <label><input type="radio" name="q24" value="C">C) F - V - F.</label>
+    <label><input type="radio" name="q24" value="D">D) V - F - V.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(24)">Concluí</button>
+    <button onclick="proximaQuestao(24)">Próxima questão</button>
+    <button onclick="questaoAnterior(24)">Questão anterior</button>
+    <button onclick="refazerQuestao(24)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 25 -->
+<div class="questao" data-id="25" id="questao-25" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 25</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">FATEC</div>
+  <p>
+    Leia os quadrinhos.<br><br>
+    <!-- Substitua o valor do src pelo link da imagem dos quadrinhos -->
+    <img src="https://res.cloudinary.com/demx2vuon/image/upload/v1768856376/87DABCA4-B90D-8A4F-F14D-ED7509458F2A-400_ihzirz.png" alt="Quadrinhos sobre eletricidade" style="max-width:100%; height:auto; margin-bottom:15px;" />
+  </p>
+  <p>Podemos afirmar corretamente que,</p>
+  <div class="alternativas">
+    <label><input type="radio" name="q25" value="A">A) No primeiro quadrinho, a cobra é eletrocutada porque o seu “serpentear” age como uma resistência elétrica, impossibilitando a passagem de corrente elétrica por seu corpo.</label>
+    <label><input type="radio" name="q25" value="B">B) No segundo quadrinho, o passarinho não é eletrocutado por não estar tocando o fio de baixo, no qual a corrente elétrica passa.</label>
+    <label><input type="radio" name="q25" value="C">C) No terceiro quadrinho, o passarinho não é eletrocutado, pois a cobra impede a passagem de corrente elétrica.</label>
+    <label><input type="radio" name="q25" value="D">D) No quarto quadrinho, a cobra é eletrocutada, pois há passagem de corrente elétrica ao se conectar a dois potenciais elétricos diferentes.</label>
+    <label><input type="radio" name="q25" value="E">E) Nos quadrinhos, a cobra e o passarinho são eletrocutados por passarem de um fio a outro.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(25)">Concluí</button>
+    <button onclick="proximaQuestao(25)">Próxima questão</button>
+    <button onclick="questaoAnterior(25)">Questão anterior</button>
+    <button onclick="refazerQuestao(25)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 26 -->
+<div class="questao" data-id="26" id="questao-26" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 26</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">UNILAGO 2013</div>
+  <p>
+    Quando, por engano, coloca-se uma lâmpada de 110 V em
+um circuito de 220 V, a lâmpada queima.
+Assinale a alternativa que representa, corretamente, a razão
+de a lâmpada queimar.
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q26" value="A">A) Efeito Peltier: aparece um gradiente de temperatura nos materiais da lâmpada submetidos à tensão elétrica que queimam o filamento da lâmpada.</label>
+    <label><input type="radio" name="q26" value="B">B) Efeito Thomson: o gradiente de temperatura entre o filamento e o bulbo da lâmpada cria uma tensão, que se opõe à tensão imposta pelo sistema, e destrói o filamento da lâmpada.</label>
+    <label><input type="radio" name="q26" value="C">C) Efeito Joule: o calor gerado pela interação da corrente com o filamento aquece o filamento a uma temperatura maior que a do ponto de fusão, e o destrói.</label>
+    <label><input type="radio" name="q26" value="D">D) Efeito Stark: o campo elétrico em excesso cria uma corrente contrária à corrente externa, queimando o filamento.</label>
+    <label><input type="radio" name="q26" value="E">E) Efeito Zeeman: o campo magnético em excesso cria uma corrente magnética contrária à corrente externa, queimando o filamento.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(26)">Concluí</button>
+    <button onclick="proximaQuestao(26)">Próxima questão</button>
+    <button onclick="questaoAnterior(26)">Questão anterior</button>
+    <button onclick="refazerQuestao(26)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 27 -->
+<div class="questao" data-id="27" id="questao-27" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 27</div>
+    <div class="dificuldade facil">Fácil</div>
+  </div>
+  <div class="fonte">Unicamp</div>
+  <p>
+    Drones vêm sendo utilizados por empresas americanas para monitorar o ambiente subaquático. Esses drones podem substituir mergulhadores, sendo capazes de realizar mergulhos de até cinquenta metros de profundidade e operar por até duas horas e meia.<br>
+    Considere um drone que utiliza uma bateria com carga total q = 900 mAh. Se o drone operar por um intervalo de tempo igual a ∆t = 90 min, a corrente média fornecida pela bateria nesse intervalo de tempo será igual a<br><br>
+    Dados: Se necessário, use aceleração da gravidade g = 10 m/s², aproxime π = 3,0 e 1 atm = 10⁵ Pa.
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q27" value="A">A) 10 mA.</label>
+    <label><input type="radio" name="q27" value="B">B) 600 mA.</label>
+    <label><input type="radio" name="q27" value="C">C) 1.350 mA.</label>
+    <label><input type="radio" name="q27" value="D">D) 81.000 mA.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(27)">Concluí</button>
+    <button onclick="proximaQuestao(27)">Próxima questão</button>
+    <button onclick="questaoAnterior(27)">Questão anterior</button>
+    <button onclick="refazerQuestao(27)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 28 -->
+<div class="questao" data-id="28" id="questao-28" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 28</div>
+    <div class="dificuldade dificil">Difícil</div>
+  </div>
+  <div class="fonte">Uerj</div>
+  <p>
+    O gráfico abaixo indica o comportamento da corrente elétrica em função do tempo em um condutor.<br><br>
+    <!-- Substitua pelo link da imagem do gráfico da corrente -->
+    <img src="https://res.cloudinary.com/demx2vuon/image/upload/v1768856932/b731752afe438024d619ab3fc61e89b6_vu85re.jpg" alt="Gráfico de corrente elétrica x tempo" style="max-width:100%; height:auto; margin-bottom:15px;" />
+  </p>
+  <p>
+    A carga elétrica, em coulombs, que passa por uma seção transversal desse condutor em 15 s é igual a:
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q28" value="A">A) 450</label>
+    <label><input type="radio" name="q28" value="B">B) 600</label>
+    <label><input type="radio" name="q28" value="C">C) 750</label>
+    <label><input type="radio" name="q28" value="D">D) 900</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(28)">Concluí</button>
+    <button onclick="proximaQuestao(28)">Próxima questão</button>
+    <button onclick="questaoAnterior(28)">Questão anterior</button>
+    <button onclick="refazerQuestao(28)">Refazer</button>
+  </div>
+</div>
+
+<!-- QUESTÃO 29 -->
+<div class="questao" data-id="29" id="questao-29" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 29</div>
+    <div class="dificuldade dificil">Difícil</div>
+  </div>
+  <div class="fonte">Unicamp</div>
+  <p>
+    Tecnologias móveis como celulares e tablets têm tempo de autonomia limitado pela carga armazenada em suas baterias. O gráfico abaixo apresenta, de forma simplificada, a corrente de recarga de uma célula de bateria de íon de lítio, em função do tempo.<br><br>
+    <!-- Substitua pelo link da imagem do gráfico da corrente de recarga -->
+    <img src="https://res.cloudinary.com/demx2vuon/image/upload/v1768857132/D5F039D896BB1E52081CE144DEB25925_kwm5qb.png" alt="Gráfico da corrente de recarga de bateria" style="max-width:100%; height:auto; margin-bottom:15px;" />
+  </p>
+  <p>
+    Considere uma célula de bateria inicialmente descarregada e que é carregada seguindo essa curva de corrente. A sua carga no final da recarga é de
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q29" value="A">A) 3,3 C.</label>
+    <label><input type="radio" name="q29" value="B">B) 11.880 C.</label>
+    <label><input type="radio" name="q29" value="C">C) 1.200 C.</label>
+    <label><input type="radio" name="q29" value="D">D) 3.300 C.</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(29)">Concluí</button>
+    <button onclick="proximaQuestao(29)">Próxima questão</button>
+    <button onclick="questaoAnterior(29)">Questão anterior</button>
+    <button onclick="refazerQuestao(29)">Refazer</button>
+  </div>
+</div>
+
+
+<!-- QUESTÃO 30 -->
+<div class="questao" data-id="30" id="questao-30" style="display:none;">
+  <div class="topo-questao">
+    <div class="numero">Questão 30</div>
+    <div class="dificuldade medio">Médio</div>
+  </div>
+  <div class="fonte">Uefs</div>
+  <p>
+    A figura representa a intensidade da corrente elétrica I, que percorre um fio condutor, em função do tempo t.<br><br>
+    <!-- Insira o link da imagem no atributo src -->
+    <img src="https://res.cloudinary.com/demx2vuon/image/upload/v1768857192/uefs_caderno_2_2017_1_28_0_mx45rs.png" alt="Gráfico de corrente elétrica I versus tempo t" style="max-width:100%; height:auto; margin-bottom:15px;" />
+  </p>
+  <p>
+    Nestas condições, é correto afirmar que a corrente média circulando no condutor no intervalo de tempo entre t = 0 e t = 6,0 ms, em mA, é igual a:
+  </p>
+  <div class="alternativas">
+    <label><input type="radio" name="q30" value="A">A) 6,0</label>
+    <label><input type="radio" name="q30" value="B">B) 7,0</label>
+    <label><input type="radio" name="q30" value="C">C) 8,0</label>
+    <label><input type="radio" name="q30" value="D">D) 9,0</label>
+    <label><input type="radio" name="q30" value="E">E) 10,0</label>
+  </div>
+  <div class="acoes">
+    <button class="acerto" onclick="concluir(30)">Concluí</button>
+    <button onclick="proximaQuestao(30)">Próxima questão</button>
+    <button onclick="questaoAnterior(30)">Questão anterior</button>
+    <button onclick="refazerQuestao(30)">Refazer</button>
+  </div>
+</div>
+
+  <!-- QUESTÕES 03 a 42 devem ser adicionadas aqui -->
+
+  <p style="text-align:center; color:#666;">As questões 03 a 42 seguem o MESMO padrão visual e funcional.<br>Elas estarão no próximo arquivo conforme combinado.</p>
+
+  <script>
+  let concluidas = 0;
+  const total = 30;
+
+  // Gabaritos personalizados por questão
+  const gabaritos = {
+    1: 'B', 2: 'C', 3: 'B', 4: 'B', 5: 'A', 6: 'E', 7: 'B', 8: 'D', 9: 'C',
+    10: 'C', 11: 'D', 12: 'D', 13: 'D', 14: 'C', 15: 'D', 16: 'C', 17: 'C',
+    18: 'D', 19: 'E', 20: 'C', 21: 'C', 22: 'B', 23: 'A', 24: 'C', 25: 'D',
+    26: 'C', 27: 'B', 28: 'A', 29: 'B', 30: 'C'
+  };
+
+  // Dificuldade das questões
+  const dificuldades = {
+    1: 'facil', 2: 'facil', 3: 'facil', 4: 'facil', 5: 'facil', 6: 'facil',
+    7: 'facil', 8: 'facil', 9: 'facil', 10: 'facil', 11: 'facil', 12: 'facil',
+    13: 'facil', 14: 'facil', 15: 'facil', 16: 'facil', 17: 'facil', 18: 'facil',
+    19: 'facil', 20: 'facil', 21: 'facil', 22: 'facil', 23: 'facil', 24: 'dificil',
+    25: 'facil', 26: 'facil', 27: 'facil', 28: 'dificil', 29: 'dificil', 30: 'medio'
+  };
+
+  // Atualiza contador e barra
+  function atualizar() {
+    document.getElementById('contador').innerText = concluidas;
+    document.getElementById('progress').style.width = (concluidas / total * 100) + '%';
+    localStorage.setItem('rp_prog_1', concluidas);
+  }
+
+  // Função para mostrar o modal de finalização e disparar confetes
+ function mostrarModalResultados() {
+  const respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
+  let facilAcertos = 0;
+  let medioAcertos = 0;
+  let dificilAcertos = 0;
+  let erradas = 0;
+
+  for (let id = 1; id <= total; id++) {
+    const resp = respostas[id];
+    if (resp && resp.concluida) {
+      const correta = gabaritos[id];
+      if (resp.resposta === correta) {
+        const dif = dificuldades[id];
+        if (dif === 'facil') facilAcertos++;
+        else if (dif === 'medio') medioAcertos++;
+        else if (dif === 'dificil') dificilAcertos++;
+      } else {
+        erradas++;
+      }
+    }
+  }
+
+  const resultadoElem = document.getElementById('resultado-dificuldades');
+  resultadoElem.innerHTML = `
+    Acertos por dificuldade:<br>
+    <strong>Fáceis:</strong> ${facilAcertos} <br>
+    <strong>Médias:</strong> ${medioAcertos} <br>
+    <strong>Difíceis:</strong> ${dificilAcertos} <br>
+    <strong>Total errado:</strong> ${erradas}
+  `;
+
+  document.getElementById('modal-final').style.display = 'flex';
+
+  // Dispara confetes coloridos na tela
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+}
+
+  function fecharModal() {
+    document.getElementById('modal-final').style.display = 'none';
+  }
+
+  // Verifica se todas as questões foram concluídas e mostra modal
+  function verificarFinalizacao() {
+    if (concluidas === total) {
+      mostrarModalResultados();
+    }
+  }
+
+  function concluir(id) {
+    const questao = document.querySelector(`.questao[data-id='${id}']`);
+    const radios = questao.querySelectorAll('input[type="radio"]');
+    let respostaSelecionada = null;
+    radios.forEach(radio => {
+      if (radio.checked) respostaSelecionada = radio.value;
+    });
+    if (!respostaSelecionada) {
+      alert('Por favor, selecione uma alternativa antes de concluir.');
+      return;
+    }
+
+    const correta = gabaritos[id];
+
+    // Salvar estado da questão no localStorage
+    let respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
+    if (!respostas[id]) {
+      concluidas++;
+      atualizar();
+    }
+    respostas[id] = {
+      resposta: respostaSelecionada,
+      concluida: true
+    };
+    localStorage.setItem('respostas_lista2', JSON.stringify(respostas));
+
+    // Desabilita alternativas e colore labels
+    radios.forEach(radio => {
+      radio.disabled = true;
+      const label = radio.parentElement;
+      if (radio.value === correta) {
+        label.style.backgroundColor = '#55efc4'; // verde
+      }
+      if (radio.checked && radio.value !== correta) {
+        label.style.backgroundColor = '#ff7675'; // vermelho
+      }
+    });
+
+    verificarFinalizacao();
+  }
+
+  function proximaQuestao(idAtual) {
+    const atual = document.getElementById(`questao-${idAtual}`);
+    const proximo = document.getElementById(`questao-${idAtual + 1}`);
+    if (atual) atual.style.display = 'none';
+    if (proximo) proximo.style.display = 'block';
+  }
+  
+  function refazerQuestao(id) {
+  const questao = document.querySelector(`.questao[data-id='${id}']`);
+  // Habilitar alternativas e limpar seleção
+  const radios = questao.querySelectorAll('input[type="radio"]');
+  radios.forEach(radio => {
+    radio.disabled = false;
+    radio.checked = false;
+    radio.parentElement.style.backgroundColor = '';
+  });
+
+  // Atualizar localStorage e progresso
+  let respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
+  if (respostas[id] && respostas[id].concluida) {
+    delete respostas[id];
+    localStorage.setItem('respostas_lista2', JSON.stringify(respostas));
+    concluidas--;
+    atualizar();
+  }
+}
+
+  function questaoAnterior(idAtual) {
+    const atual = document.getElementById(`questao-${idAtual}`);
+    const anterior = document.getElementById(`questao-${idAtual - 1}`);
+    if (atual) atual.style.display = 'none';
+    if (anterior) anterior.style.display = 'block';
+  }
+
+  const btnTodas = document.getElementById('btn-todas-questoes');
+  const listaQuestoes = document.getElementById('lista-questoes');
+
+  // Cria botões das questões para navegação rápida
+  for (let i = 1; i <= 30; i++) {
+    const numBtn = document.createElement('button');
+    numBtn.textContent = i;
+    numBtn.style.cssText = `
+      margin: 3px; padding: 6px 10px; background: #a29bfe; border: none; border-radius: 4px; 
+      cursor: pointer; font-size: 13px; color: white;
+    `;
+    numBtn.onclick = () => {
+      document.querySelectorAll('.questao').forEach(q => q.style.display = 'none');
+      const questaoEscolhida = document.getElementById(`questao-${i}`);
+      if (questaoEscolhida) questaoEscolhida.style.display = 'block';
+      listaQuestoes.style.display = 'none';
+    };
+    listaQuestoes.appendChild(numBtn);
+  }
+
+  btnTodas.onclick = () => {
+    listaQuestoes.style.display = (listaQuestoes.style.display === 'none') ? 'block' : 'none';
+  }
+
+  // Restaura as respostas e status no carregamento da página
+  window.onload = () => {
+    let respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
+    concluidas = 0;
+
+    const questoes = document.querySelectorAll('.questao');
+    let aberta = false;
+
+    for (let i = 0; i < questoes.length; i++) {
+      const q = questoes[i];
+      const id = parseInt(q.getAttribute('data-id'));
+      const estado = respostas[id];
+
+      if (estado && estado.concluida) {
+        concluidas++;
+        const radios = q.querySelectorAll('input[type="radio"]');
+        const correta = gabaritos[id];
+
+        radios.forEach(radio => {
+          radio.disabled = true;
+          if (radio.value === estado.resposta) {
+            radio.checked = true;
+            if (radio.value === correta) {
+              radio.parentElement.style.backgroundColor = '#55efc4';
+            } else {
+              radio.parentElement.style.backgroundColor = '#ff7675';
+            }
+          } else if (radio.value === correta) {
+            radio.parentElement.style.backgroundColor = '#55efc4';
+          }
+        });
+      } else {
+        const radios = q.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+          radio.disabled = false;
+          radio.checked = false;
+          radio.parentElement.style.backgroundColor = '';
+        });
+      }
+
+      if (!aberta) {
+        if (!estado || !estado.concluida) {
+          q.style.display = 'block';
+          aberta = true;
+        } else {
+          q.style.display = 'none';
+        }
+      } else {
+        q.style.display = 'none';
+      }
+    }
+    if (!aberta && questoes.length > 0) {
+      questoes[0].style.display = 'block';
+    }
+
+    atualizar();
+    verificarFinalizacao();
+  };
+</script>
+
+
+</body>
+</html>
+
