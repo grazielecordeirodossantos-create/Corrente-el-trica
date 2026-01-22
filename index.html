@@ -932,37 +932,55 @@ de a lâmpada queimar.
 
   <p style="text-align:center; color:#666;">As questões 03 a 42 seguem o MESMO padrão visual e funcional.<br>Elas estarão no próximo arquivo conforme combinado.</p>
 
-  <script>
-  let concluidas = 0;
-  const total = 30;
+ <script>
+let concluidas = 0;
+const total = 30;
 
-  // Gabaritos personalizados por questão
-  const gabaritos = {
-    1: 'B', 2: 'C', 3: 'B', 4: 'B', 5: 'A', 6: 'E', 7: 'B', 8: 'D', 9: 'C',
-    10: 'C', 11: 'D', 12: 'D', 13: 'D', 14: 'C', 15: 'D', 16: 'C', 17: 'C',
-    18: 'D', 19: 'E', 20: 'C', 21: 'C', 22: 'B', 23: 'A', 24: 'C', 25: 'D',
-    26: 'C', 27: 'B', 28: 'A', 29: 'B', 30: 'C'
-  };
+const gabaritos = {
+  1: 'B', 2: 'C', 3: 'B', 4: 'B', 5: 'A', 6: 'E', 7: 'B', 8: 'D', 9: 'C',
+  10: 'C', 11: 'D', 12: 'D', 13: 'D', 14: 'C', 15: 'D', 16: 'C', 17: 'C',
+  18: 'D', 19: 'E', 20: 'C', 21: 'C', 22: 'B', 23: 'A', 24: 'C', 25: 'D',
+  26: 'C', 27: 'B', 28: 'A', 29: 'B', 30: 'C'
+};
 
-  // Dificuldade das questões
-  const dificuldades = {
-    1: 'facil', 2: 'facil', 3: 'facil', 4: 'facil', 5: 'facil', 6: 'facil',
-    7: 'facil', 8: 'facil', 9: 'facil', 10: 'facil', 11: 'facil', 12: 'facil',
-    13: 'facil', 14: 'facil', 15: 'facil', 16: 'facil', 17: 'facil', 18: 'facil',
-    19: 'facil', 20: 'facil', 21: 'facil', 22: 'facil', 23: 'facil', 24: 'dificil',
-    25: 'facil', 26: 'facil', 27: 'facil', 28: 'dificil', 29: 'dificil', 30: 'medio'
-  };
+const dificuldades = {
+  1: 'facil', 2: 'facil', 3: 'facil', 4: 'facil', 5: 'facil', 6: 'facil',
+  7: 'facil', 8: 'facil', 9: 'facil', 10: 'facil', 11: 'facil', 12: 'facil',
+  13: 'facil', 14: 'facil', 15: 'facil', 16: 'facil', 17: 'facil', 18: 'facil',
+  19: 'facil', 20: 'facil', 21: 'facil', 22: 'facil', 23: 'facil', 24: 'dificil',
+  25: 'facil', 26: 'facil', 27: 'facil', 28: 'dificil', 29: 'dificil', 30: 'medio'
+};
 
-  // Atualiza contador e barra
-  function atualizar() {
-    document.getElementById('contador').innerText = concluidas;
-    document.getElementById('progress').style.width = (concluidas / total * 100) + '%';
-    localStorage.setItem('rp_prog_1', concluidas);
+const respostas = {};
+
+// Atualiza contador e barra
+function atualizar() {
+  document.getElementById('contador').innerText = concluidas;
+  document.getElementById('progress').style.width = (concluidas / total * 100) + '%';
+}
+
+// Salvar respostas no localStorage
+function salvarLocalStorage() {
+  localStorage.setItem('respostas', JSON.stringify(respostas));
+  localStorage.setItem('concluidas', concluidas.toString());
+}
+
+// Carregar respostas do localStorage
+function carregarLocalStorage() {
+  const res = localStorage.getItem('respostas');
+  const conc = localStorage.getItem('concluidas');
+  if (res) {
+    const obj = JSON.parse(res);
+    Object.keys(obj).forEach(id => {
+      respostas[id] = obj[id];
+    });
   }
+  if (conc) {
+    concluidas = parseInt(conc) || 0;
+  }
+}
 
-  // Função para mostrar o modal de finalização e disparar confetes
- function mostrarModalResultados() {
-  const respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
+function mostrarModalResultados() {
   let facilAcertos = 0;
   let medioAcertos = 0;
   let dificilAcertos = 0;
@@ -994,7 +1012,6 @@ de a lâmpada queimar.
 
   document.getElementById('modal-final').style.display = 'flex';
 
-  // Dispara confetes coloridos na tela
   confetti({
     particleCount: 150,
     spread: 70,
@@ -1002,68 +1019,64 @@ de a lâmpada queimar.
   });
 }
 
-  function fecharModal() {
-    document.getElementById('modal-final').style.display = 'none';
+function fecharModal() {
+  document.getElementById('modal-final').style.display = 'none';
+}
+
+function verificarFinalizacao() {
+  if (concluidas === total) {
+    mostrarModalResultados();
   }
+}
 
-  // Verifica se todas as questões foram concluídas e mostra modal
-  function verificarFinalizacao() {
-    if (concluidas === total) {
-      mostrarModalResultados();
-    }
-  }
-
-  function concluir(id) {
-    const questao = document.querySelector(`.questao[data-id='${id}']`);
-    const radios = questao.querySelectorAll('input[type="radio"]');
-    let respostaSelecionada = null;
-    radios.forEach(radio => {
-      if (radio.checked) respostaSelecionada = radio.value;
-    });
-    if (!respostaSelecionada) {
-      alert('Por favor, selecione uma alternativa antes de concluir.');
-      return;
-    }
-
-    const correta = gabaritos[id];
-
-    // Salvar estado da questão no localStorage
-    let respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
-    if (!respostas[id]) {
-      concluidas++;
-      atualizar();
-    }
-    respostas[id] = {
-      resposta: respostaSelecionada,
-      concluida: true
-    };
-    localStorage.setItem('respostas_lista2', JSON.stringify(respostas));
-
-    // Desabilita alternativas e colore labels
-    radios.forEach(radio => {
-      radio.disabled = true;
-      const label = radio.parentElement;
-      if (radio.value === correta) {
-        label.style.backgroundColor = '#55efc4'; // verde
-      }
-      if (radio.checked && radio.value !== correta) {
-        label.style.backgroundColor = '#ff7675'; // vermelho
-      }
-    });
-
-    verificarFinalizacao();
-  }
-
-  function proximaQuestao(idAtual) {
-    const atual = document.getElementById(`questao-${idAtual}`);
-    const proximo = document.getElementById(`questao-${idAtual + 1}`);
-    if (atual) atual.style.display = 'none';
-    if (proximo) proximo.style.display = 'block';
-  }
-  
-  function refazerQuestao(id) {
+function concluir(id) {
   const questao = document.querySelector(`.questao[data-id='${id}']`);
-  // Habilitar alternativas e limpar seleção
+  const radios = questao.querySelectorAll('input[type="radio"]');
+  let respostaSelecionada = null;
+  radios.forEach(radio => {
+    if (radio.checked) respostaSelecionada = radio.value;
+  });
+  if (!respostaSelecionada) {
+    alert('Por favor, selecione uma alternativa antes de concluir.');
+    return;
+  }
+
+  const correta = gabaritos[id];
+
+  if (!respostas[id]) {
+    concluidas++;
+  }
+  respostas[id] = {
+    resposta: respostaSelecionada,
+    concluida: true
+  };
+
+  // Atualiza visual
+  radios.forEach(radio => {
+    radio.disabled = true;
+    const label = radio.parentElement;
+    if (radio.value === correta) {
+      label.style.backgroundColor = '#55efc4'; // verde
+    }
+    if (radio.checked && radio.value !== correta) {
+      label.style.backgroundColor = '#ff7675'; // vermelho
+    }
+  });
+
+  salvarLocalStorage();
+  atualizar();
+  verificarFinalizacao();
+}
+
+function proximaQuestao(idAtual) {
+  const atual = document.getElementById(`questao-${idAtual}`);
+  const proximo = document.getElementById(`questao-${idAtual + 1}`);
+  if (atual) atual.style.display = 'none';
+  if (proximo) proximo.style.display = 'block';
+}
+
+function refazerQuestao(id) {
+  const questao = document.querySelector(`.questao[data-id='${id}']`);
   const radios = questao.querySelectorAll('input[type="radio"]');
   radios.forEach(radio => {
     radio.disabled = false;
@@ -1071,108 +1084,96 @@ de a lâmpada queimar.
     radio.parentElement.style.backgroundColor = '';
   });
 
-  // Atualizar localStorage e progresso
-  let respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
   if (respostas[id] && respostas[id].concluida) {
     delete respostas[id];
-    localStorage.setItem('respostas_lista2', JSON.stringify(respostas));
     concluidas--;
+    salvarLocalStorage();
     atualizar();
   }
 }
 
-  function questaoAnterior(idAtual) {
-    const atual = document.getElementById(`questao-${idAtual}`);
-    const anterior = document.getElementById(`questao-${idAtual - 1}`);
-    if (atual) atual.style.display = 'none';
-    if (anterior) anterior.style.display = 'block';
-  }
+function questaoAnterior(idAtual) {
+  const atual = document.getElementById(`questao-${idAtual}`);
+  const anterior = document.getElementById(`questao-${idAtual - 1}`);
+  if (atual) atual.style.display = 'none';
+  if (anterior) anterior.style.display = 'block';
+}
 
-  const btnTodas = document.getElementById('btn-todas-questoes');
-  const listaQuestoes = document.getElementById('lista-questoes');
+const btnTodas = document.getElementById('btn-todas-questoes');
+const listaQuestoes = document.getElementById('lista-questoes');
 
-  // Cria botões das questões para navegação rápida
-  for (let i = 1; i <= 30; i++) {
-    const numBtn = document.createElement('button');
-    numBtn.textContent = i;
-    numBtn.style.cssText = `
-      margin: 3px; padding: 6px 10px; background: #a29bfe; border: none; border-radius: 4px; 
-      cursor: pointer; font-size: 13px; color: white;
-    `;
-    numBtn.onclick = () => {
-      document.querySelectorAll('.questao').forEach(q => q.style.display = 'none');
-      const questaoEscolhida = document.getElementById(`questao-${i}`);
-      if (questaoEscolhida) questaoEscolhida.style.display = 'block';
-      listaQuestoes.style.display = 'none';
-    };
-    listaQuestoes.appendChild(numBtn);
-  }
-
-  btnTodas.onclick = () => {
-    listaQuestoes.style.display = (listaQuestoes.style.display === 'none') ? 'block' : 'none';
-  }
-
-  // Restaura as respostas e status no carregamento da página
-  window.onload = () => {
-    let respostas = JSON.parse(localStorage.getItem('respostas_lista2')) || {};
-    concluidas = 0;
-
-    const questoes = document.querySelectorAll('.questao');
-    let aberta = false;
-
-    for (let i = 0; i < questoes.length; i++) {
-      const q = questoes[i];
-      const id = parseInt(q.getAttribute('data-id'));
-      const estado = respostas[id];
-
-      if (estado && estado.concluida) {
-        concluidas++;
-        const radios = q.querySelectorAll('input[type="radio"]');
-        const correta = gabaritos[id];
-
-        radios.forEach(radio => {
-          radio.disabled = true;
-          if (radio.value === estado.resposta) {
-            radio.checked = true;
-            if (radio.value === correta) {
-              radio.parentElement.style.backgroundColor = '#55efc4';
-            } else {
-              radio.parentElement.style.backgroundColor = '#ff7675';
-            }
-          } else if (radio.value === correta) {
-            radio.parentElement.style.backgroundColor = '#55efc4';
-          }
-        });
-      } else {
-        const radios = q.querySelectorAll('input[type="radio"]');
-        radios.forEach(radio => {
-          radio.disabled = false;
-          radio.checked = false;
-          radio.parentElement.style.backgroundColor = '';
-        });
-      }
-
-      if (!aberta) {
-        if (!estado || !estado.concluida) {
-          q.style.display = 'block';
-          aberta = true;
-        } else {
-          q.style.display = 'none';
-        }
-      } else {
-        q.style.display = 'none';
-      }
-    }
-    if (!aberta && questoes.length > 0) {
-      questoes[0].style.display = 'block';
-    }
-
-    atualizar();
-    verificarFinalizacao();
+for (let i = 1; i <= total; i++) {
+  const numBtn = document.createElement('button');
+  numBtn.textContent = i;
+  numBtn.style.cssText = `
+    margin: 3px; padding: 6px 10px; background: #a29bfe; border: none; border-radius: 4px; 
+    cursor: pointer; font-size: 13px; color: white;
+  `;
+  numBtn.onclick = () => {
+    document.querySelectorAll('.questao').forEach(q => q.style.display = 'none');
+    const questaoEscolhida = document.getElementById(`questao-${i}`);
+    if (questaoEscolhida) questaoEscolhida.style.display = 'block';
+    listaQuestoes.style.display = 'none';
   };
+  listaQuestoes.appendChild(numBtn);
+}
+
+btnTodas.onclick = () => {
+  listaQuestoes.style.display = (listaQuestoes.style.display === 'none') ? 'block' : 'none';
+}
+
+// Restaura estados das respostas na página
+function restaurarRespostas() {
+  for (let id = 1; id <= total; id++) {
+    const resp = respostas[id];
+    const questao = document.querySelector(`.questao[data-id='${id}']`);
+    if (!resp || !questao) continue;
+
+    const radios = questao.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+      radio.checked = (radio.value === resp.resposta);
+      if (resp.concluida) {
+        radio.disabled = true;
+        const label = radio.parentElement;
+        const correta = gabaritos[id];
+        if (radio.value === correta) {
+          label.style.backgroundColor = '#55efc4'; // verde
+        }
+        if (radio.checked && radio.value !== correta) {
+          label.style.backgroundColor = '#ff7675'; // vermelho
+        }
+      }
+      else {
+        radio.disabled = false;
+        radio.parentElement.style.backgroundColor = '';
+      }
+    });
+  }
+}
+
+window.onload = () => {
+  carregarLocalStorage();
+
+  const questoes = document.querySelectorAll('.questao');
+  let aberta = false;
+
+  for (let i = 0; i < questoes.length; i++) {
+    const q = questoes[i];
+    if (!aberta) {
+      q.style.display = 'block';
+      aberta = true;
+    } else {
+      q.style.display = 'none';
+    }
+  }
+
+  restaurarRespostas();
+  atualizar();
+  verificarFinalizacao();
+};
 </script>
+
 
 
 </body>
 </html>
-
